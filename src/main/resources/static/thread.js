@@ -3,20 +3,31 @@ document.addEventListener('DOMContentLoaded', function () {
     const threadId = urlParams.get('id');
 
     if (threadId) {
-        const apiUrl = `http://localhost:8080/api/threads/${threadId}`;
+        const threadUrl = `http://localhost:8080/api/threads/${threadId}`;
+        const userUrl = 'http://localhost:8080/api/users/';
 
-        fetch(apiUrl)
+        let threadData;
+
+        fetch(threadUrl)
             .then(response => response.json())
-            .then(data => displayThreadContent(data))
+            .then(thread => {
+                threadData = thread;
+
+                return fetch(userUrl + thread.creatorId);
+            })
+            .then(response => response.json())
+            .then(creator => {
+                displayThreadContent(threadData, creator.username);
+            })
             .catch(error => console.error('Error fetching thread data:', error));
 
-        function displayThreadContent(thread) {
-            console.log(thread)
+        function displayThreadContent(thread, creatorUsername) {
+            console.log(thread);
             const threadContentDiv = document.getElementById('threadContent');
 
             const titleDiv = document.createElement('div');
             titleDiv.classList.add('threadTitle');
-            titleDiv.textContent = thread.title;
+            titleDiv.innerHTML = `<h2>${thread.title} by ${creatorUsername}</h2>`;
 
             const contentsDiv = document.createElement('div');
             contentsDiv.classList.add('threadContents');

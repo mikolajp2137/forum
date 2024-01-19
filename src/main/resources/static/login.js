@@ -9,7 +9,7 @@ function login() {
         .then(data => {
             if (data.length > 0 && data[0].password === password) {
                 saveToSessionStorage(data[0].id, username);
-                window.location.href = 'index.html'; // Redirect to home page
+                window.location.href = 'index.html';
             } else {
                 alert('Incorrect username or password. Please try again.');
             }
