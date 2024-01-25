@@ -6,11 +6,12 @@ if (getUsernameFromSessionStorage() === null) {
 window.addThread = function () {
     const title = document.getElementById('title').value;
     const contents = document.getElementById('contents').value;
+    const categoryId = document.getElementById('category').value;
 
     const threadData = {
         creatorId: getUserIdFromSessionStorage(),
         contents: contents,
-        categoryId: 1,
+        categoryId: categoryId,
         title: title
     };
 

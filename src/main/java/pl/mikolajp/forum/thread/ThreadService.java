@@ -36,4 +36,7 @@ class ThreadService {
         threadRepository.deleteThread(id);
     }
 
+    List<ThreadDao> getAllThreadsByCategory(Integer id) {
+        return threadRepository.findAllThreadsByCategory(id);
+    }
 }

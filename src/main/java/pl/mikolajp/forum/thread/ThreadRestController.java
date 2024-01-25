@@ -29,6 +29,12 @@ class ThreadRestController {
         return result.orElse(null);
     }
 
+    @GetMapping("/byCategory/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    List<ThreadDao> getAllThreadsFromCategory(@PathVariable Integer id){
+        return threadService.getAllThreadsByCategory(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void addThread(@RequestBody ThreadDto threadDto){
@@ -36,7 +42,7 @@ class ThreadRestController {
     }
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     void updateThread(@RequestBody ThreadDto threadDto, @PathVariable Integer id){
         threadService.updateThread(threadDto, id);
     }

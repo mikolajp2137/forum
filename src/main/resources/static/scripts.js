@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => console.error('Error fetching data:', error));
 
     function displayThreads(threads) {
-        threads.forEach(thread => {
+        const reversedThreadsList = threads.reverse();
+
+        reversedThreadsList.forEach(thread => {
             const threadDiv = document.createElement('div');
             threadDiv.classList.add('thread');
 

@@ -30,4 +30,8 @@ class ThreadRepository {
     void deleteThread(Integer id){
         iThreadRepository.deleteById(id);
     }
+
+    List<ThreadDao> findAllThreadsByCategory(Integer id) {
+        return iThreadRepository.findByCategoryId(id);
+    }
 }

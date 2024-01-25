@@ -1,42 +1,98 @@
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const threadId = urlParams.get('id');
+    const loggedInUserId = getUserIdFromSessionStorage();
 
-    if (threadId) {
-        const threadUrl = `http://localhost:8080/api/threads/${threadId}`;
-        const userUrl = 'http://localhost:8080/api/users/';
+    fetch(`http://localhost:8080/api/threads/${threadId}`)
+        .then(response => response.json())
+        .then(data => {
+            displayThreadContent(data);
+            const threadCreatorId = data.creatorId;
+        })
+        .catch(error => console.error('Error fetching thread data:', error));
 
-        let threadData;
+    fetch(`http://localhost:8080/api/replies/${threadId}`)
+        .then(response => response.json())
+        .then(data => displayReplies(data))
+        .catch(error => console.error('Error fetching replies:', error));
 
-        fetch(threadUrl)
-            .then(response => response.json())
-            .then(thread => {
-                threadData = thread;
+    const replyInput = document.getElementById('replyInput');
+    const replyButton = document.getElementById('replyButton');
 
-                return fetch(userUrl + thread.creatorId);
-            })
-            .then(response => response.json())
-            .then(creator => {
-                displayThreadContent(threadData, creator.username);
-            })
-            .catch(error => console.error('Error fetching thread data:', error));
+    replyButton.addEventListener('click', function () {
+        const loggedInUserId = getUserIdFromSessionStorage();
 
-        function displayThreadContent(thread, creatorUsername) {
-            console.log(thread);
-            const threadContentDiv = document.getElementById('threadContent');
+        if (loggedInUserId !== null) {
+            const replyContents = replyInput.value.trim();
 
-            const titleDiv = document.createElement('div');
-            titleDiv.classList.add('threadTitle');
-            titleDiv.innerHTML = `<h2>${thread.title} by ${creatorUsername}</h2>`;
+            if (replyContents !== '') {
+                const replyData = {
+                    creatorId: Number(loggedInUserId),
+                    threadId: Number(threadId),
+                    contents: replyContents
+                };
 
-            const contentsDiv = document.createElement('div');
-            contentsDiv.classList.add('threadContents');
-            contentsDiv.textContent = thread.contents;
-
-            threadContentDiv.appendChild(titleDiv);
-            threadContentDiv.appendChild(contentsDiv);
+                fetch('http://localhost:8080/api/replies', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(replyData)
+                })
+                    .then(response => {
+                        if (response.status === 204) {
+                            console.log('Reply added successfully');
+                            location.reload();
+                        } else if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                    })
+                    .catch(error => console.error('Error adding reply:', error));
+            } else {
+                console.log('Reply contents cannot be empty.');
+            }
+        } else {
+            alert('Please log in to reply.');
         }
-    } else {
-        console.error('Thread ID not provided in the URL');
-    }
+    });
 });
+
+function displayThreadContent(thread) {
+    const threadContentDiv = document.getElementById('threadContent');
+
+    const titleDiv = document.createElement('div');
+    titleDiv.classList.add('threadTitle');
+    titleDiv.textContent = thread.title;
+
+    const contentsDiv = document.createElement('div');
+    contentsDiv.classList.add('threadContents');
+    contentsDiv.textContent = thread.contents;
+
+    threadContentDiv.appendChild(titleDiv);
+    threadContentDiv.appendChild(contentsDiv);
+}
+
+function displayReplies(replies) {
+    const repliesListDiv = document.getElementById('repliesList');
+
+    replies.forEach(reply => {
+        fetch(`http://localhost:8080/api/users/${reply.creatorId}`)
+            .then(response => response.json())
+            .then(userData => {
+                const replyDiv = document.createElement('div');
+                replyDiv.classList.add('thread');
+
+                const replyContentDiv = document.createElement('div');
+                replyContentDiv.classList.add('threadContents');
+                replyContentDiv.textContent = `${userData.username}: ${reply.contents}`;
+
+                replyDiv.appendChild(replyContentDiv);
+                repliesListDiv.appendChild(replyDiv);
+            })
+            .catch(error => console.error('Error fetching user data for reply:', error));
+    });
+}
+
+function getUserIdFromSessionStorage() {
+    return sessionStorage.getItem('userId');
+}
