@@ -93,6 +93,34 @@ function displayReplies(replies) {
     });
 }
 
+function deleteThread() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const threadId = urlParams.get('id');
+    const confirmation = confirm('Are you sure you want to delete this thread?');
+
+    if (confirmation) {
+        fetch(`http://localhost:8080/api/threads/${threadId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.status === 204) {
+                    console.log('Thread deleted successfully');
+                    // Redirect to home page or another appropriate location
+                    window.location.href = 'index.html';
+                } else {
+                    console.error('Error deleting thread. HTTP status:', response.status);
+                }
+            })
+            .catch(error => console.error('Error deleting thread:', error));
+    }
+}
+
+function editThread() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    window.location.href = `http://localhost:8080/editThread.html?id=${id}`;
+}
+
 function getUserIdFromSessionStorage() {
     return sessionStorage.getItem('userId');
 }

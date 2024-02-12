@@ -24,7 +24,7 @@ class ThreadRepository {
     }
 
     List<ThreadDao> findByTitle(Optional<String> title){
-        return iThreadRepository.findByTitle(title);
+        return iThreadRepository.findByTitleContains(title);
     }
 
     void deleteThread(Integer id){
