@@ -1,12 +1,13 @@
 package pl.mikolajp.forum.reply;
 
-class ReplyMapper {
+import pl.mikolajp.forum.thread.ThreadDto;
+
+public class ReplyMapper {
     ReplyDao mapDtoToDao(ReplyDto replyDto){
         ReplyDao replyDao = new ReplyDao();
         replyDao.setCreatorId(replyDto.getCreatorId());
         replyDao.setThreadId(replyDto.getThreadId());
         replyDao.setContents(replyDto.getContents());
-        replyDao.setAttachmentId(replyDto.getAttachmentId());
 
         return replyDao;
     }
@@ -17,7 +18,6 @@ class ReplyMapper {
         replyDao.setCreatorId(replyDto.getCreatorId());
         replyDao.setThreadId(replyDto.getThreadId());
         replyDao.setContents(replyDto.getContents());
-        replyDao.setAttachmentId(replyDto.getAttachmentId());
 
         return replyDao;
     }
@@ -26,8 +26,15 @@ class ReplyMapper {
         return new ReplyDto(
                 replyDao.getCreatorId(),
                 replyDao.getThreadId(),
-                replyDao.getContents(),
-                replyDao.getAttachmentId()
+                replyDao.getContents()
+        );
+    }
+
+    public ReplyDto mapReplyFromThreadDao(ThreadDto threadDto, Integer threadId){
+        return new ReplyDto(
+                threadDto.getCreatorId(),
+                threadId,
+                threadDto.getContents()
         );
     }
 }

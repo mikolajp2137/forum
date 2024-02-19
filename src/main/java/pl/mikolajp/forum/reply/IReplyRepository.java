@@ -6,4 +6,5 @@ import java.util.List;
 
 interface IReplyRepository extends JpaRepository<ReplyDao, Integer> {
     List<ReplyDao> findByThreadId(Integer id);
+    void deleteAllByThreadId(Integer id);
 }

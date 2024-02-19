@@ -15,8 +15,8 @@ class ThreadRepository {
         return iThreadRepository.findAll();
     }
 
-    void saveThread(ThreadDao threadDao){
-        iThreadRepository.save(threadDao);
+    ThreadDao saveThread(ThreadDao threadDao){
+        return iThreadRepository.save(threadDao);
     }
 
     Optional<ThreadDao> findById(Integer id){

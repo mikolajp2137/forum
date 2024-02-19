@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name = "replies")
 @Data
-class ReplyDao {
+public class ReplyDao {
     @Id
     @Column(name = "reply_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +16,4 @@ class ReplyDao {
     @Column(name = "thread_id")
     private Integer threadId;
     private String contents;
-    @Column(name = "attachment_id")
-    private Integer attachmentId;
 }

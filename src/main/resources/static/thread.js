@@ -74,6 +74,7 @@ function displayThreadContent(thread) {
 
 function displayReplies(replies) {
     const repliesListDiv = document.getElementById('repliesList');
+    replies.shift();
 
     replies.forEach(reply => {
         fetch(`http://localhost:8080/api/users/${reply.creatorId}`)

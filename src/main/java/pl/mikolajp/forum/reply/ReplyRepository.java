@@ -26,4 +26,8 @@ class ReplyRepository {
     void deleteReply(Integer id){
         iReplyRepository.deleteById(id);
     }
+
+    void deleteAllRepliesByThreadId(Integer id){
+        iReplyRepository.deleteAllByThreadId(id);
+    }
 }
