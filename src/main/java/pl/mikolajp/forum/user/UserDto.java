@@ -2,12 +2,13 @@ package pl.mikolajp.forum.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-class UserDto {
+@NoArgsConstructor
+public class UserDto {
     private String username;
     private String email;
     private String password;
-    private Integer role_id;
 }

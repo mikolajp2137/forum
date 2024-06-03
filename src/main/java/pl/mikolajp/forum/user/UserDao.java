@@ -14,5 +14,5 @@ class UserDao {
     private String username;
     private String email;
     private String password;
-    private Integer role_id;
+    private Boolean enabled;
 }

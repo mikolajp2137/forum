@@ -1,60 +1,99 @@
+function getUsername() {
+    const apiUrl = 'http://localhost:8080/username';
+
+    return fetch(apiUrl)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.text();
+        })
+        .catch(error => {
+            console.error('Error fetching username:', error);
+            throw error;
+        });
+}
+
+function getUserId(username) {
+    const apiUrl = 'http://localhost:8080/api/users?name=';
+
+    return fetch(apiUrl + username)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            const userId = data[0].id;
+            return userId;
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            throw error;
+        });
+}
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const threadId = urlParams.get('id');
-    const loggedInUserId = getUserIdFromSessionStorage();
 
-    fetch(`http://localhost:8080/api/threads/${threadId}`)
-        .then(response => response.json())
-        .then(data => {
-            displayThreadContent(data);
-            const threadCreatorId = data.creatorId;
-        })
-        .catch(error => console.error('Error fetching thread data:', error));
-
-    fetch(`http://localhost:8080/api/replies/${threadId}`)
-        .then(response => response.json())
-        .then(data => displayReplies(data))
-        .catch(error => console.error('Error fetching replies:', error));
-
-    const replyInput = document.getElementById('replyInput');
-    const replyButton = document.getElementById('replyButton');
-
-    replyButton.addEventListener('click', function () {
-        const loggedInUserId = getUserIdFromSessionStorage();
-
-        if (loggedInUserId !== null) {
-            const replyContents = replyInput.value.trim();
-
-            if (replyContents !== '') {
-                const replyData = {
-                    creatorId: Number(loggedInUserId),
-                    threadId: Number(threadId),
-                    contents: replyContents
-                };
-
-                fetch('http://localhost:8080/api/replies', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(replyData)
+    getUsername()
+        .then(username => getUserId(username))
+        .then(loggedInUserId => {
+            fetch(`http://localhost:8080/api/threads/${threadId}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayThreadContent(data);
+                    const threadCreatorId = data.creatorId;
                 })
-                    .then(response => {
-                        if (response.status === 204) {
-                            console.log('Reply added successfully');
-                            location.reload();
-                        } else if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                    })
-                    .catch(error => console.error('Error adding reply:', error));
-            } else {
-                console.log('Reply contents cannot be empty.');
-            }
-        } else {
-            alert('Please log in to reply.');
-        }
-    });
+                .catch(error => console.error('Error fetching thread data:', error));
+
+            fetch(`http://localhost:8080/api/replies/${threadId}`)
+                .then(response => response.json())
+                .then(data => displayReplies(data))
+                .catch(error => console.error('Error fetching replies:', error));
+
+            const replyInput = document.getElementById('replyInput');
+            const replyButton = document.getElementById('replyButton');
+
+            replyButton.addEventListener('click', function () {
+                if (loggedInUserId !== null) {
+                    const replyContents = replyInput.value.trim();
+
+                    if (replyContents !== '') {
+                        const replyData = {
+                            creatorId: Number(loggedInUserId),
+                            threadId: Number(threadId),
+                            contents: replyContents
+                        };
+
+                        fetch('http://localhost:8080/api/replies', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(replyData)
+                        })
+                            .then(response => {
+                                if (response.status === 204) {
+                                    console.log('Reply added successfully');
+                                    location.reload();
+                                } else if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
+                                }
+                            })
+                            .catch(error => console.error('Error adding reply:', error));
+                    } else {
+                        console.log('Reply contents cannot be empty.');
+                    }
+                } else {
+                    alert('Please log in to reply.');
+                }
+            });
+        })
+        .catch(error => console.error('Error getting user data:', error));
 });
 
 function displayThreadContent(thread) {
@@ -106,7 +145,6 @@ function deleteThread() {
             .then(response => {
                 if (response.status === 204) {
                     console.log('Thread deleted successfully');
-                    // Redirect to home page or another appropriate location
                     window.location.href = 'index.html';
                 } else {
                     console.error('Error deleting thread. HTTP status:', response.status);
@@ -120,8 +158,4 @@ function editThread() {
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('id');
     window.location.href = `http://localhost:8080/editThread.html?id=${id}`;
-}
-
-function getUserIdFromSessionStorage() {
-    return sessionStorage.getItem('userId');
 }

@@ -25,6 +25,10 @@ public class ReplyService {
         replyRepository.saveReply(replyMapper.mapDtoToDao(replyDto));
     }
 
+    public void addReply(ReplyDao replyDao){
+        replyRepository.saveReply(replyDao);
+    }
+
     public void updateReply(ReplyDto replyDto, Integer id){
         replyRepository.saveReply(replyMapper.mapDtoToDao(replyDto, id));
     }

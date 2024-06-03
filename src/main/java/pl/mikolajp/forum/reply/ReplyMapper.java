@@ -3,7 +3,7 @@ package pl.mikolajp.forum.reply;
 import pl.mikolajp.forum.thread.ThreadDto;
 
 public class ReplyMapper {
-    ReplyDao mapDtoToDao(ReplyDto replyDto){
+    public ReplyDao mapDtoToDao(ReplyDto replyDto){
         ReplyDao replyDao = new ReplyDao();
         replyDao.setCreatorId(replyDto.getCreatorId());
         replyDao.setThreadId(replyDto.getThreadId());

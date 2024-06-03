@@ -8,16 +8,16 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-class UserService {
+public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper = new UserMapper();
+
 
     List<UserDao> getAllUsers(){
         return userRepository.findAllUsers();
     }
 
-    void addUser(UserDto userDto){
-        userDto.setRole_id(1);
+    public void addUser(UserDto userDto){
         userRepository.saveUser(userMapper.mapDtoToDao(userDto));
     }
 

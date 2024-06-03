@@ -6,7 +6,7 @@ class UserMapper {
         userDao.setUsername(userDto.getUsername());
         userDao.setEmail(userDto.getEmail());
         userDao.setPassword(userDto.getPassword());
-        userDao.setRole_id(userDto.getRole_id());
+        userDao.setEnabled(true);
 
         return userDao;
     }
@@ -17,7 +17,7 @@ class UserMapper {
         userDao.setUsername(userDto.getUsername());
         userDao.setEmail(userDto.getEmail());
         userDao.setPassword(userDto.getPassword());
-        userDao.setRole_id(userDto.getRole_id());
+        userDao.setEnabled(true);
 
         return userDao;
     }
@@ -26,8 +26,7 @@ class UserMapper {
         return new UserDto(
                 userDao.getUsername(),
                 userDao.getEmail(),
-                userDao.getPassword(),
-                userDao.getRole_id()
+                userDao.getPassword()
         );
     }
 }

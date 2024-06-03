@@ -3,6 +3,9 @@ package pl.mikolajp.forum.thread;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import pl.mikolajp.forum.attachment.AttachmentDto;
+import pl.mikolajp.forum.attachment.AttachmentService;
 import pl.mikolajp.forum.reply.ReplyDao;
 import pl.mikolajp.forum.reply.ReplyDto;
 import pl.mikolajp.forum.reply.ReplyMapper;
@@ -18,6 +21,7 @@ import java.util.Optional;
 class ThreadService {
     private final ThreadRepository threadRepository;
     private final ReplyService replyService;
+    private final AttachmentService attachmentService;
     private final ThreadMapper threadMapper = new ThreadMapper();
     private final ReplyMapper replyMapper = new ReplyMapper();
 
@@ -56,8 +60,18 @@ class ThreadService {
     void addThread(ThreadDto threadDto) {
         ThreadDao savedThread = threadRepository.saveThread(threadMapper.mapDtoToDao(threadDto));
         log.info("CREATED THREAD ID: "+String.valueOf(savedThread.getThreadId()));
+        //ReplyDao reply = replyMapper.mapDtoToDao(replyMapper.mapReplyFromThreadDao(threadDto, savedThread.getThreadId()));
         ReplyDto reply = replyMapper.mapReplyFromThreadDao(threadDto, savedThread.getThreadId());
         replyService.addReply(reply);
+
+//        if (attachment != null) {
+//            AttachmentDto attachmentDto = new AttachmentDto();
+//            attachmentDto.setFileName(attachment.getOriginalFilename());
+//            attachmentDto.setFilePath("C:\\Users\\Mikolaj\\Documents\\forumAttachments" + attachment.getOriginalFilename());
+//            attachmentDto.setReplyId(reply.getReplyId());
+//
+//            attachmentService.saveAttachment(attachmentDto);
+//        }
     }
 
     void updateThread(ThreadDto threadDto, Integer id) {

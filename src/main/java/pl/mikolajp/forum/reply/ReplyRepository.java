@@ -12,7 +12,7 @@ class ReplyRepository {
     private final IReplyRepository iReplyRepository;
 
     List<ReplyDao> findAllRepliesByThreadId(Integer id){
-        return iReplyRepository.findByThreadId(id);
+        return iReplyRepository.findByThreadIdOrderByReplyIdAsc(id);
     }
 
     Optional<ReplyDao> findReplyById(Integer id){

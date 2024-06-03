@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 interface IReplyRepository extends JpaRepository<ReplyDao, Integer> {
-    List<ReplyDao> findByThreadId(Integer id);
+    List<ReplyDao> findByThreadIdOrderByReplyIdAsc(Integer id);
     void deleteAllByThreadId(Integer id);
 }
