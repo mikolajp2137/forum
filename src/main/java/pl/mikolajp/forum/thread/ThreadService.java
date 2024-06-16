@@ -18,14 +18,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class ThreadService {
+public class ThreadService {
     private final ThreadRepository threadRepository;
     private final ReplyService replyService;
     private final AttachmentService attachmentService;
     private final ThreadMapper threadMapper = new ThreadMapper();
     private final ReplyMapper replyMapper = new ReplyMapper();
 
-    List<ThreadDto> getAllThreads() {
+    public List<ThreadDto> getAllThreads() {
         List<ThreadDao> threadDaoList = threadRepository.findAllThreads();
         List<ThreadDto> results = new ArrayList<>();
 

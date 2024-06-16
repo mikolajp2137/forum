@@ -2,7 +2,7 @@ package pl.mikolajp.forum.thread;
 
 import pl.mikolajp.forum.reply.ReplyDao;
 
-class ThreadMapper {
+public class ThreadMapper {
     ThreadDao mapDtoToDao(ThreadDto threadDto){
         ThreadDao threadDao = new ThreadDao();
         threadDao.setCreatorId(threadDto.getCreatorId());
