@@ -41,7 +41,7 @@ public class SecurityConfig {
                                         .requestMatchers("/username").permitAll()
                                         .requestMatchers("api/users/**").permitAll()
                                         .requestMatchers("api/users").permitAll()
-                                        .anyRequest().authenticated()
+                                        .anyRequest().permitAll()
                                         .and()
                                         .formLogin().loginPage("/login").defaultSuccessUrl("/index.html", true).permitAll();
                             } catch (Exception e) {
