@@ -8,41 +8,7 @@
     <title>Forum™ - Login</title>
 </head>
 <body style="background-color: beige">
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/home}">home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/forum}">forum</a>
-        </li>
-        <div th:if="${#authorization.expression('isAuthenticated()')}">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/addThread}">create_thread</a>
-            </li>
-        </div>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/search}">search</a>
-        </li>
-    </ul>
-    <ul class="navbar-nav">
-        <div th:unless="${#authorization.expression('isAuthenticated()')}">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/login}">login</a>
-            </li>
-        </div>
-        <div th:if="${#authorization.expression('isAuthenticated()')}">
-            <li class="nav-item">
-                <p style="color: aliceblue"><span sec:authentication="principal.username"></span></p>
-            </li>
-            <li class="nav-item">
-                <form action="#" th:action="@{/logout}" method="POST">
-                    <input type="submit" value="logout">
-                </form>
-            </li>
-        </div>
-    </ul>
-</nav>
+<div th:replace="navbar :: navbar"></div>
 
 <div class="container">
     <p>Login to the Forum™!</p>

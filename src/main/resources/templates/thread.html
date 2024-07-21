@@ -8,28 +8,7 @@
     <title th:text="'Forum™ - ' + ${thread.title}">Forum™ - Thread Title</title>
 </head>
 <body>
-<nav class="navbar navbar-expand navbar-dark bg-dark">
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/home}">Home</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/login}">Login</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/register}">Register</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/addThread}">Add</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/search}">Search</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/categories}">Categories</a>
-        </li>
-    </ul>
-</nav>
+<div th:replace="navbar :: navbar"></div>
 
 <div class="container">
     <div class="row">
