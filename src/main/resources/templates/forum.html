@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://ww.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <title>Forum™ - Home</title>
+    <title>Forum™ - Landing page</title>
 </head>
-<body style="background-color: beige">
+<body>
 <nav class="navbar navbar-expand navbar-dark bg-dark">
     <ul class="navbar-nav me-auto">
         <li class="nav-item">
@@ -16,9 +16,11 @@
         <li class="nav-item">
             <a class="nav-link" th:href="@{/forum}">forum</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/addThread}">create_thread</a>
-        </li>
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/addThread}">create_thread</a>
+            </li>
+        </div>
         <li class="nav-item">
             <a class="nav-link" th:href="@{/search}">search</a>
         </li>
@@ -42,17 +44,6 @@
     </ul>
 </nav>
 
-<div class="container">
-    <p>Welcome to the Forum™! Here you can share your thoughts on the topic this Forum™ is about!</p>
-
-    <h2>!IMPORTANT INFORMATION!</h2>
-    <p>This is the only freely accessible page on the Forum™. To access other content you are required to create a free account. Don't worry, there's no requirement to provide email or any other personal data.</p>
-
-    <p>Created by Mikołaj Pieńkosz, Anno Domini 2024, using Java™ 17 and Spring Boot 3. Wonderful templating thanks to Thymeleaf™ and no JavaShit thanks to HTMX™.</p>
-
-    <p>No Quiche Eaters™ allowed!</p>
-
-    <p>You can view the code at github: https://github.com/mikolajp2137/forum</p>
-</div>
+<h1>TODO: Forum landing page with categories and stuff</h1>
 </body>
 </html>

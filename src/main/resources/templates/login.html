@@ -1,10 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://ww.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Forum - Login</title>
-</head>
-<body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <title>Forum™ - Login</title>
+</head>
+<body style="background-color: beige">
+<nav class="navbar navbar-expand navbar-dark bg-dark">
+    <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/home}">home</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/forum}">forum</a>
+        </li>
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/addThread}">create_thread</a>
+            </li>
+        </div>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/search}">search</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav">
+        <div th:unless="${#authorization.expression('isAuthenticated()')}">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/login}">login</a>
+            </li>
+        </div>
+        <div th:if="${#authorization.expression('isAuthenticated()')}">
+            <li class="nav-item">
+                <p style="color: aliceblue"><span sec:authentication="principal.username"></span></p>
+            </li>
+            <li class="nav-item">
+                <form action="#" th:action="@{/logout}" method="POST">
+                    <input type="submit" value="logout">
+                </form>
+            </li>
+        </div>
+    </ul>
+</nav>
+
+<div class="container">
+    <p>Login to the Forum™!</p>
+
+    <form action="#" th:action="@{/authenticateUser}" method="POST">
+        <div th:if="${param.error}">
+            <i>Sorry! Entered login data is incorrect :(</i>
+        </div>
+        <div th:if="${param.logout}">
+            <i>Y u logout :(</i>
+        </div>
+
+        <p>
+            Username: <input type="text" name="username">
+        </p>
+        <p>
+            Password: <input type="password" name="password">
+        </p>
+        <input type="submit" value="login">
+    </form>
+
+    <div>
+        <a th:href="@{/register/showRegistrationForm}"
+           class="btn btn-primary mt-3"
+           role="button"
+           aria-pressed="true">Register New User</a>
+    </div>
+</div>
 </body>
 </html>
