@@ -10,19 +10,28 @@
 <body>
 <div th:replace="navbar :: navbar"></div>
 
-<div class="container">
-    <div class="row">
-        <div class="clo-12">
-            <div th:each="thread : ${threads}" class="card mb-3">
-                <div class="card-header">
-                    <h5 th:text="${thread.title}"></h5>
-                </div>
-                <div class="card-body">
-                    <p class="card-text" th:text="${reply.contents}"></p>
-                </div>
-            </div>
+<!-- thread main body -->
+<div class="card">
+    <h5 class="card-header" th:text="${thread.creator.username} + ' says: ' + ${thread.title}"></h5>
+    <div class="card-body">
+        <p class="card-text" th:text="${thread.comments[0].text}"></p>
+        <a href="#" class="btn btn-primary" th:if="${#authentication.name == thread.creator.username}">Edit</a>
+        <a href="#" class="btn btn-primary" th:if="${#authentication.name == thread.creator.username}">Delete</a>
+    </div>
+</div>
+
+<!-- comment sections-->
+
+<div th:each="comment, commentStat : ${thread.comments}" th:if="${commentStat.index > 0}">
+    <div class="card">
+        <div class="card-header" th:text="${comment.creator.username}"></div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p th:text="${comment.text}"></p>
+            </blockquote>
         </div>
     </div>
 </div>
+
 </body>
 </html>

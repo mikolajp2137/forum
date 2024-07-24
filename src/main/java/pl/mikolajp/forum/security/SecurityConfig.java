@@ -9,6 +9,7 @@ import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import pl.mikolajp.forum.service.UserService;
 
 import javax.sql.DataSource;
@@ -47,7 +48,8 @@ public class SecurityConfig {
                 .logout(logout -> logout.permitAll()
                 )
                 .exceptionHandling(configurer ->
-                        configurer.accessDeniedPage("/access-denied"));
+                        configurer.accessDeniedPage("/access-denied")
+                );
         return http.build();
     }
 }
