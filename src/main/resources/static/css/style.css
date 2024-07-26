@@ -1,0 +1,13 @@
+body{
+    background-color: #758467;
+}
+
+.card {
+    margin-top: 10px;
+    background-color: #505F48;
+}
+
+.reply {
+    background-color: #A1B29B;
+    font-size: medium;
+}

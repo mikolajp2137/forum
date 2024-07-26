@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://ww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <title th:text="'Forum™ - ' + ${thread.title}">Forum™ - Thread Title</title>
+</head>
+<body>
+<div th:replace="navbar :: navbar"></div>
+
+<div class="container">
+    <!-- thread main body -->
+    <div class="card">
+        <h5 class="card-header" th:text="${thread.creator.username} + ' says: ' + ${thread.title}"></h5>
+        <div class="card-body">
+            <p class="card-text" th:text="${thread.comments[0].text}"></p>
+            <a href="#" class="btn btn-primary" th:if="${#authentication.name == thread.creator.username}">Edit</a>
+            <a href="#" class="btn btn-primary" th:if="${#authentication.name == thread.creator.username}">Delete</a>
+        </div>
+    </div>
+
+    <!-- comments sections-->
+    <div th:each="comment, commentStat : ${thread.comments}" th:if="${commentStat.index > 0}">
+        <div class="card reply">
+            <div class="card-header" th:text="${comment.creator.username} + ' replies: '"></div>
+            <div class="card-body">
+                <blockquote class="mb-0">
+                    <p th:text="${comment.text}"></p>
+                </blockquote>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

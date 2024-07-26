@@ -40,7 +40,7 @@ public class RegistrationController {
 
         model.addAttribute("userDto", new UserDto());
 
-        return "register/register";
+        return "user-management/register";
     }
 
     @PostMapping("/processRegistrationForm")
@@ -50,21 +50,20 @@ public class RegistrationController {
             HttpSession session, Model model) {
 
         String username = userDto.getUsername();
-        logger.info("Processing registration form for: " + username);
 
         // form validation
         if (theBindingResult.hasErrors()){
-            return "register/register";
+            return "user-management/register";
         }
 
         // check the database if user already exists
         User existing = userService.findByUserName(username);
         if (existing != null){
             model.addAttribute("userDto", new UserDto());
-            model.addAttribute("registrationError", "User name already exists.");
+            model.addAttribute("registrationError", "Username already exists.");
 
             logger.warning("User name already exists.");
-            return "register/register";
+            return "user-management/register";
         }
 
         // create user account and store in the databse

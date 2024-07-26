@@ -2,6 +2,7 @@ package pl.mikolajp.forum.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import pl.mikolajp.forum.model.dto.ThreadCreationDto;
 import pl.mikolajp.forum.model.dto.ThreadMainPageDto;
@@ -49,15 +50,15 @@ public class ThreadService {
         return thread.orElse(null);
     }
 
-    public void saveThread(ThreadCreationDto newThread){
+    public void saveThread(ThreadCreationDto newThread, Authentication authentication){
         Date createdAtTimestamp = new Date();
-        User creator = userService.findByUserName(newThread.getCreator());
+        User creator = userService.findByUserName(authentication.getName());
 
         Thread thread = new Thread();
         thread.setTitle(newThread.getTitle());
         thread.setCreator(creator);
         thread.setCreationDate(createdAtTimestamp);
-        thread.setCategory(categoryRepository.findById(newThread.getCategoryId()).orElse(null));
+        thread.setCategory(categoryRepository.findById(newThread.getCategoryId()).get());
 
         Comment comment = new Comment();
         comment.setCreationDate(createdAtTimestamp);
@@ -68,5 +69,26 @@ public class ThreadService {
         thread.setComments(List.of(comment));
 
         threadRepository.save(thread);
+    }
+
+    public Thread fetchEditedThread(Long id) {
+        Thread thread = threadRepository.findById(id).get();
+        return thread;
+    }
+
+    public void updateThread(ThreadCreationDto threadCreationDto, Thread thread){
+        thread.setTitle(threadCreationDto.getTitle());
+        thread.setCategory(categoryRepository.findById(threadCreationDto.getCategoryId()).get());
+
+        Comment comment = thread.getComments().get(0);
+        comment.setText(threadCreationDto.getText());
+
+        threadRepository.save(thread);
+        commentRepository.save(comment);
+    }
+
+    public void deleteThread(Long id) {
+        Thread thread = threadRepository.findById(id).get();
+        threadRepository.delete(thread);
     }
 }

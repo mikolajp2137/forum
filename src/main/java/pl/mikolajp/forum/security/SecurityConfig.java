@@ -34,7 +34,8 @@ public class SecurityConfig {
             customAuthenticationSuccessHandler) throws Exception {
         http.authorizeHttpRequests(configurer ->
                         configurer
-                                .requestMatchers("/home").permitAll()
+                                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                                .requestMatchers("/home", "/", "/index").permitAll()
                                 .requestMatchers("/").hasRole("USER")
                                 .requestMatchers("/register/**").permitAll()
                                 .anyRequest().authenticated())
