@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentDto {
-    private String creator;
+    private Long threadId;
     private String text;
 }

@@ -11,3 +11,10 @@ body{
     background-color: #A1B29B;
     font-size: medium;
 }
+
+/* Style the images within the carousel items */
+.carousel-item img {
+    max-height: 400px; /* Maximum height of the image */
+    width: auto; /* Adjust width to maintain aspect ratio */
+    object-fit: contain; /* Ensure the entire image is visible */
+}

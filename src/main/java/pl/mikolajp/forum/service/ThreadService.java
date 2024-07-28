@@ -52,7 +52,7 @@ public class ThreadService {
 
     public void saveThread(ThreadCreationDto newThread, Authentication authentication){
         Date createdAtTimestamp = new Date();
-        User creator = userService.findByUserName(authentication.getName());
+        User creator = userService.findByUsername(authentication.getName());
 
         Thread thread = new Thread();
         thread.setTitle(newThread.getTitle());

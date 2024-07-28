@@ -5,10 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.mikolajp.forum.model.dto.CommentDto;
 import pl.mikolajp.forum.model.dto.ThreadCreationDto;
 import pl.mikolajp.forum.model.dto.ThreadMainPageDto;
+import pl.mikolajp.forum.model.entity.Comment;
 import pl.mikolajp.forum.model.entity.Thread;
 import pl.mikolajp.forum.service.CategoryService;
+import pl.mikolajp.forum.service.CommentService;
 import pl.mikolajp.forum.service.ThreadService;
 
 import java.util.List;
@@ -19,6 +22,8 @@ public class ForumMvcController {
     private ThreadService threadService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping({"/forum"})
     public String showHome(Model model){
@@ -36,6 +41,7 @@ public class ForumMvcController {
     @GetMapping({"/thread/{id}"})
     public String showThread(Model model, @PathVariable("id") Long id){
         model.addAttribute(threadService.getThreadById(id));
+        model.addAttribute("commentDto", new CommentDto());
 
         return "thread/thread";
     }
@@ -73,7 +79,6 @@ public class ForumMvcController {
             return "redirect:/forum";
         }
 
-
         return "thread/edit";
     }
 
@@ -98,4 +103,15 @@ public class ForumMvcController {
         }
         return "redirect:/forum";
     }
+
+    @PostMapping("/new/comment/{threadId}")
+    public String addComment(@ModelAttribute("commentNewDto") CommentDto commentDto, Authentication authentication, @PathVariable Long threadId) {
+        String username = authentication.getName();
+        commentDto.setThreadId(threadId);
+
+        commentService.addComment(commentDto, username);
+
+        return "redirect:/thread/" + commentDto.getThreadId();
+    }
+
 }

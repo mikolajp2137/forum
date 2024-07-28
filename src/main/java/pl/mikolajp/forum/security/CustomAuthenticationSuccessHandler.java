@@ -23,7 +23,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
             response, Authentication authentication)
             throws IOException, ServletException {
         String username = authentication.getName();
-        User user = userService.findByUserName(username);
+        User user = userService.findByUsername(username);
 // now place in the session
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
