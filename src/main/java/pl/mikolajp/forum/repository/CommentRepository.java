@@ -6,5 +6,5 @@ import pl.mikolajp.forum.model.entity.Comment;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByThreadId(Long threadId);
+    List<Comment> findAllByThreadIdOrderByCreationDateAsc(Long threadId);
 }

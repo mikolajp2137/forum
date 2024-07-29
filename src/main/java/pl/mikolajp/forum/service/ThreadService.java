@@ -33,7 +33,7 @@ public class ThreadService {
         List<ThreadMainPageDto> mainPageCards = new ArrayList<>();
         List<Thread> threads = threadRepository.findAll(Sort.by(Sort.Direction.DESC, "creationDate"));
         for(Thread thread : threads){
-            String shortDescription = commentRepository.findAllByThreadId(thread.getId()).stream()
+            String shortDescription = commentRepository.findAllByThreadIdOrderByCreationDateAsc(thread.getId()).stream()
                     .findFirst()
                     .map(Comment::getText)
                     .map(text -> text.length() > 97 ? text.substring(0, 97) + "..." : text)

@@ -15,8 +15,10 @@
         <div class="card-body">
             <a th:href="@{/thread/{id}(id=${thread.id})}" class="card-title" th:text="${thread.title}"></a>
             <p class="card-text" th:text="${thread.shortenedDescription}"></p>
-            <a th:href="@{/edit/thread/{id}(id=${thread.id})}" class="card-link" th:if="${#authentication.name == thread.creator}">Edit</a>
-            <a th:href="@{/delete/thread/{id}(id=${thread.id})}" class="card-link" th:if="${#authentication.name == thread.creator}"
+            <a th:href="@{/edit/thread/{id}(id=${thread.id})}" class="card-link"
+               th:if="${#authentication.name == thread.creator or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">Edit</a>
+            <a th:href="@{/delete/thread/{id}(id=${thread.id})}" class="card-link"
+               th:if="${#authentication.name == thread.creator or #authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                onclick="return confirm('Are you sure you want to delete this content?')">Delete</a>
         </div>
     </div>

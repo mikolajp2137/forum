@@ -114,4 +114,14 @@ public class ForumMvcController {
         return "redirect:/thread/" + commentDto.getThreadId();
     }
 
+    @GetMapping("/delete/comment/{id}")
+    public String deleteComment(@PathVariable("id") Long id){
+        Long redirectId;
+        try{
+            redirectId = commentService.deleteComment(id);
+        }catch (Exception e){
+            return "redirect:/forum";
+        }
+        return "redirect:/thread/"+redirectId;
+    }
 }
