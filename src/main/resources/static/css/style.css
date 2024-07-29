@@ -18,3 +18,8 @@ body{
     width: auto; /* Adjust width to maintain aspect ratio */
     object-fit: contain; /* Ensure the entire image is visible */
 }
+
+.card-title{
+    font-weight: bold;
+    font-size: larger;
+}
