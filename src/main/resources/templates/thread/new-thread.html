@@ -12,7 +12,7 @@
 <div th:replace="navbar :: navbar"></div>
 
 <div class="container">
-    <form method="post" th:object="${threadCreationDto}" th:action="@{/new/thread}">
+    <form method="post" enctype="multipart/form-data" th:object="${threadCreationDto}" th:action="@{/new/thread}">
         <div class="row">
             <label>Title:</label>
             <input class="form-control" th:field="${threadCreationDto.title}">
@@ -34,6 +34,13 @@
             </select>
         </div>
 
+        <div class="row">
+            <label for="imageFiles">Attachments:</label>
+            <input class="form-control" type="file" id="imageFiles" name="imageFiles" multiple
+                   th:field="*{imageFiles}">
+        </div>
+
+        <br><br>
         <div class="row">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>

@@ -12,14 +12,45 @@ body{
     font-size: medium;
 }
 
-/* Style the images within the carousel items */
-.carousel-item img {
-    max-height: 400px; /* Maximum height of the image */
-    width: auto; /* Adjust width to maintain aspect ratio */
-    object-fit: contain; /* Ensure the entire image is visible */
-}
-
 .card-title{
     font-weight: bold;
     font-size: larger;
+}
+
+.popup-trigger:checked + .popup-container {
+    display: flex;
+}
+
+.popup-container {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.popup-content {
+    max-width: 90%;
+    max-height: 90%;
+    z-index: 1001;
+}
+
+.popup-content img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }

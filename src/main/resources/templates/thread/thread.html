@@ -18,31 +18,28 @@
         <div class="card-body">
             <p class="card-text" th:text="${thread.comments[0].text}"></p>
 
-            <br>
             <!-- images section -->
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" src="/images/test1.png" alt="First slide">
+            <tr th:if="${!#lists.isEmpty(thread.comments[0].images)}">
+                <td>
+                    <div style="display: flex; flex-wrap: wrap; gap: 10px; max-width: 100%;">
+                        <div th:each="image, imageStat : ${thread.comments[0].images}" style="margin-bottom: 10px;">
+                            <label th:for="'popup' + ${imageStat.index}">
+                                <img th:src="@{'/images/' + ${image.imageName}}"
+                                     alt="Thumbnail"
+                                     style="width: 200px; height: 200px; object-fit: cover; cursor: pointer;">
+                            </label>
+                            <input type="checkbox" th:id="'popup' + ${imageStat.index}" class="popup-trigger" style="display:none;">
+                            <div class="popup-container">
+                                <label th:for="'popup' + ${imageStat.index}" class="popup-background"></label>
+                                <div class="popup-content">
+                                    <img th:src="@{'/images/' + ${image.imageName}}" alt="Full size image">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" src="/images/test2.png" alt="Second slide">
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" src="/images/test3.jpg" alt="Third slide">
-                    </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+                </td>
+            </tr>
             <!-- end of images section -->
-            <br>
 
             <a th:href="@{/edit/thread/{id}(id=${thread.id})}" class="card-link"
                th:if="${#authentication.name == thread.creator.username or #authorization.expression('hasRole(''ROLE_ADMIN'')')}">Edit</a>
