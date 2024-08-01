@@ -19,26 +19,28 @@
             <p class="card-text" th:text="${thread.comments[0].text}"></p>
 
             <!-- images section -->
-            <tr th:if="${!#lists.isEmpty(thread.comments[0].images)}">
-                <td>
-                    <div style="display: flex; flex-wrap: wrap; gap: 10px; max-width: 100%;">
-                        <div th:each="image, imageStat : ${thread.comments[0].images}" style="margin-bottom: 10px;">
-                            <label th:for="'popup' + ${imageStat.index}">
-                                <img th:src="@{'/images/' + ${image.imageName}}"
-                                     alt="Thumbnail"
-                                     style="width: 200px; height: 200px; object-fit: cover; cursor: pointer;">
-                            </label>
-                            <input type="checkbox" th:id="'popup' + ${imageStat.index}" class="popup-trigger" style="display:none;">
-                            <div class="popup-container">
-                                <label th:for="'popup' + ${imageStat.index}" class="popup-background"></label>
-                                <div class="popup-content">
-                                    <img th:src="@{'/images/' + ${image.imageName}}" alt="Full size image">
+            <table>
+                <tr th:if="${!#lists.isEmpty(thread.comments[0].images)}">
+                    <td>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px; max-width: 100%;">
+                            <div th:each="image, imageStat : ${thread.comments[0].images}" style="margin-bottom: 10px;">
+                                <label th:for="'popup' + ${imageStat.index}">
+                                    <img th:src="@{'/images/' + ${image.imageName}}"
+                                         alt="Thumbnail"
+                                         style="width: 200px; height: 200px; object-fit: cover; cursor: pointer;">
+                                </label>
+                                <input type="checkbox" th:id="'popup' + ${imageStat.index}" class="popup-trigger" style="display:none;">
+                                <div class="popup-container">
+                                    <label th:for="'popup' + ${imageStat.index}" class="popup-background"></label>
+                                    <div class="popup-content">
+                                        <img th:src="@{'/images/' + ${image.imageName}}" alt="Full size image">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            </table>
             <!-- end of images section -->
 
             <a th:href="@{/edit/thread/{id}(id=${thread.id})}" class="card-link edit-link"
@@ -80,10 +82,6 @@
 </div>
 
 <div th:replace="~{footer :: footer}"></div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
 </html>

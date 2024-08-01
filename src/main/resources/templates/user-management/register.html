@@ -37,21 +37,23 @@
                         </div>
                         <!-- Username -->
                         <div class="input-group">
-                            <input type="text" th:field="*{username}" placeholder="Username (*)" class="form-control"/>
+                            <label for="username"></label>
+                            <input id="username" type="text" th:field="*{username}" placeholder="Username (*)" class="form-control"/>
                         </div>
 
                         <div th:if="${#fields.hasErrors('username')}" class="text-danger validation-error">
                             <ul>
-                                <li th:each="err : ${#fields.errors('username')}" th:text="'Username ' + ${err}"/>
+                                <li th:each="err : ${#fields.errors('username')}" th:text="'Username ' + ${err}"></li>
                             </ul>
                         </div>
                         <!-- Password -->
                         <div class="input-group">
-                            <input type="password" th:field="*{password}" placeholder="Password (*)" class="form-control"/>
+                            <label for="password"></label>
+                            <input id="password" type="password" th:field="*{password}" placeholder="Password (*)" class="form-control"/>
                         </div>
                         <div th:if="${#fields.hasErrors('password')}" class="text-danger validation-error">
                             <ul>
-                                <li th:each="err : ${#fields.errors('password')}" th:text="'Password ' + ${err}"/>
+                                <li th:each="err : ${#fields.errors('password')}" th:text="'Password ' + ${err}"></li>
                             </ul>
                         </div>
 

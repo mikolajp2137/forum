@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://ww.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,18 +14,18 @@
 <div class="container">
   <form method="post" th:action="@{'/edit/thread/' + ${thread.id}}" th:object="${threadCreationDto}" enctype="multipart/form-data">
     <div class="row">
-      <label>Title:</label>
-      <input class="form-control" th:field="${threadCreationDto.title}">
+      <label for="threadTitle">Title:</label>
+      <input id="threadTitle" class="form-control" th:field="${threadCreationDto.title}">
     </div>
 
     <div class="row">
-      <label>Text:</label>
-      <input class="form-control" th:field="${threadCreationDto.text}">
+      <label for="threadText">Text:</label>
+      <input id="threadText" class="form-control" th:field="${threadCreationDto.text}">
     </div>
 
     <div class="row">
-      <label>Category:</label>
-      <select class="form-control" th:field="${threadCreationDto.categoryId}">
+      <label for="categoryId">Category:</label>
+      <select id="categoryId" class="form-control" th:field="${threadCreationDto.categoryId}">
         <option value="">Select a category</option>
         <option th:each="category : ${allCategories}"
                 th:value="${category.id}"
