@@ -16,11 +16,13 @@
     <div class="row">
       <label for="threadTitle">Title:</label>
       <input id="threadTitle" class="form-control" th:field="${threadCreationDto.title}">
+      <p th:if="${#fields.hasErrors('title')}" th:errorclass="text-danger" th:errors="${threadCreationDto.title}"></p>
     </div>
 
     <div class="row">
       <label for="threadText">Text:</label>
       <input id="threadText" class="form-control" th:field="${threadCreationDto.text}">
+      <p th:if="${#fields.hasErrors('text')}" th:errorclass="text-danger" th:errors="${threadCreationDto.text}"></p>
     </div>
 
     <div class="row">
@@ -32,6 +34,7 @@
                 th:text="${category.name}">
         </option>
       </select>
+      <p th:if="${#fields.hasErrors('categoryId')}" th:errorclass="text-danger" th:errors="${threadCreationDto.categoryId}"></p>
     </div>
 
     <div class="row">

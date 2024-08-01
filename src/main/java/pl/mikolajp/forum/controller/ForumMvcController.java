@@ -80,7 +80,10 @@ public class ForumMvcController {
     }
 
     @PostMapping(value = "/new/thread")
-    public String createNewThread(@ModelAttribute ThreadCreationDto threadCreationDto, Authentication authentication) {
+    public String createNewThread(@Valid @ModelAttribute ThreadCreationDto threadCreationDto, BindingResult bindingResult, Authentication authentication) {
+        if (bindingResult.hasErrors()){
+            return "thread/new-thread";
+        }
         threadService.saveThread(threadCreationDto, authentication);
 
         return "redirect:/forum";
@@ -107,7 +110,11 @@ public class ForumMvcController {
     }
 
     @PostMapping("/edit/thread/{id}")
-    public String updateThread(Model model, @PathVariable("id") Long id, @ModelAttribute ThreadCreationDto threadCreationDto) {
+    public String updateThread(Model model, @PathVariable("id") Long id, @Valid @ModelAttribute ThreadCreationDto threadCreationDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()){
+            return "thread/new-thread";
+        }
+
         try {
             Thread thread = threadService.fetchEditedThread(id);
             threadService.updateThread(threadCreationDto, thread);

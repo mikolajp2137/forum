@@ -6,11 +6,11 @@ import lombok.Data;
 
 @Data
 public class UserDto {
-    @NotNull(message = "is required")
-    @Size(min = 1, message = "is required")
+    @NotNull(message = "Username is required")
+    @Size(min = 1, message = "Username is required")
     private String username;
 
-    @NotNull(message = "is required")
-    @Size(min = 1, message = "is required")
+    @NotNull(message = "Password is required")
+    @Size(min = 1, message = "Password is required")
     private String password;
 }
