@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.mikolajp.forum.model.dto.CommentDto;
 import pl.mikolajp.forum.model.dto.ThreadCreationDto;
 import pl.mikolajp.forum.model.dto.ThreadMainPageDto;
+import pl.mikolajp.forum.model.entity.Category;
 import pl.mikolajp.forum.model.entity.Comment;
 import pl.mikolajp.forum.model.entity.Thread;
 import pl.mikolajp.forum.service.CategoryService;
@@ -28,6 +29,16 @@ public class ForumMvcController {
     @GetMapping({"/forum"})
     public String showHome(Model model){
         List<ThreadMainPageDto> threads = threadService.showThreadCards();
+        model.addAttribute("allCategories", categoryService.getAllCategories());
+        model.addAttribute("threads", threads);
+
+        return "forum";
+    }
+
+    @GetMapping({"/forum/{categoryId}"})
+    public String showFromCategory(Model model, @PathVariable("categoryId") Long categoryId){
+        List<ThreadMainPageDto> threads = threadService.showThreadCardsFromCategory(categoryId);
+        model.addAttribute("allCategories", categoryService.getAllCategories());
         model.addAttribute("threads", threads);
 
         return "forum";

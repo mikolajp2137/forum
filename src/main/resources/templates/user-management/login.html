@@ -21,10 +21,11 @@
             <div class="card-body">
                 <div class="card-text">
                     <form action="#" th:action="@{/authenticateUser}" method="POST" class="form-horizontal">
-                        <!-- User name -->
+                        <!-- Username -->
                         <div class="input-group">
                             <input type="text" name="username" placeholder="Username (*)" class="form-control"/>
                         </div>
+
                         <!-- Password -->
                         <div class="input-group">
                             <input type="password" name="password" placeholder="Password (*)" class="form-control"/>
@@ -48,5 +49,7 @@
            aria-pressed="true">You don't have account? Create one!</a>
     </div>
 </div>
+
+<div th:replace="footer :: footer"></div>
 </body>
 </html>

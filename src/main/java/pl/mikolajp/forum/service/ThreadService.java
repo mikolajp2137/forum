@@ -75,9 +75,62 @@ public class ThreadService {
         comment.setCreator(creator);
         comment.setThread(thread);
 
+        List<Attachment> images = saveUploadedAttachments(newThread);
+
+        comment.setImages(images);
+        thread.setComments(List.of(comment));
+
+        threadRepository.save(thread);
+    }
+
+    public Thread fetchEditedThread(Long id) {
+        Thread thread = threadRepository.findById(id).get();
+        return thread;
+    }
+
+    public void updateThread(ThreadCreationDto threadCreationDto, Thread thread){
+        thread.setTitle(threadCreationDto.getTitle());
+        thread.setCategory(categoryRepository.findById(threadCreationDto.getCategoryId()).get());
+
+        Comment comment = thread.getComments().get(0);
+        comment.setText(threadCreationDto.getText());
+
+        if (!threadCreationDto.getImageFiles().isEmpty() && threadCreationDto.getImageFiles().get(0).getSize() > 0){
+            try{
+                Resource resource = new ClassPathResource("static");
+                Path resourcePath = Paths.get(resource.getURI());
+                Path uploadPath = resourcePath.resolve("images");
+
+                List<Path> oldImagesPaths = new ArrayList<>();
+                for (Attachment oldAttachment : comment.getImages()) {
+                    Path fullPath = uploadPath.resolve(oldAttachment.getImageName());
+                    oldImagesPaths.add(fullPath);
+                }
+                for (Path pathToDelete : oldImagesPaths){
+                    try {
+                        Files.delete(pathToDelete);
+                    } catch (Exception e){
+                        System.out.println("Error deleting file: " + pathToDelete);
+                        e.printStackTrace();
+                    }
+                }
+            }catch (Exception e){
+                System.out.println(e);
+            }
+
+            List<Attachment> images = saveUploadedAttachments(threadCreationDto);
+
+            comment.setImages(images);
+        }
+
+        threadRepository.save(thread);
+        commentRepository.save(comment);
+    }
+
+    private static List<Attachment> saveUploadedAttachments(ThreadCreationDto threadCreationDto) {
         List<Attachment> images = new ArrayList<>();
 
-        for (MultipartFile image : newThread.getImageFiles()){
+        for (MultipartFile image : threadCreationDto.getImageFiles()){
             Attachment uploadedImage = new Attachment();
 
             Date createdAt = new Date();
@@ -105,31 +158,51 @@ public class ThreadService {
 
             images.add(uploadedImage);
         }
-
-        comment.setImages(images);
-        thread.setComments(List.of(comment));
-
-        threadRepository.save(thread);
-    }
-
-    public Thread fetchEditedThread(Long id) {
-        Thread thread = threadRepository.findById(id).get();
-        return thread;
-    }
-
-    public void updateThread(ThreadCreationDto threadCreationDto, Thread thread){
-        thread.setTitle(threadCreationDto.getTitle());
-        thread.setCategory(categoryRepository.findById(threadCreationDto.getCategoryId()).get());
-
-        Comment comment = thread.getComments().get(0);
-        comment.setText(threadCreationDto.getText());
-
-        threadRepository.save(thread);
-        commentRepository.save(comment);
+        return images;
     }
 
     public void deleteThread(Long id) {
         Thread thread = threadRepository.findById(id).get();
+
+        try{
+            Resource resource = new ClassPathResource("static");
+            Path resourcePath = Paths.get(resource.getURI());
+            Path uploadPath = resourcePath.resolve("images");
+
+            List<Path> oldImagesPaths = new ArrayList<>();
+            for (Attachment oldAttachment : thread.getComments().get(0).getImages()) {
+                Path fullPath = uploadPath.resolve(oldAttachment.getImageName());
+                oldImagesPaths.add(fullPath);
+            }
+            for (Path pathToDelete : oldImagesPaths){
+                try {
+                    Files.delete(pathToDelete);
+                } catch (Exception e){
+                    System.out.println("Error deleting file: " + pathToDelete);
+                    e.printStackTrace();
+                }
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+
         threadRepository.delete(thread);
+
+
+    }
+
+    public List<ThreadMainPageDto> showThreadCardsFromCategory(Long categoryId) {
+        List<ThreadMainPageDto> mainPageCards = new ArrayList<>();
+        List<Thread> threads = threadRepository.findAllByCategoryId(categoryId, Sort.by(Sort.Direction.DESC, "creationDate"));
+        for(Thread thread : threads){
+            String shortDescription = commentRepository.findAllByThreadIdOrderByCreationDateAsc(thread.getId()).stream()
+                    .findFirst()
+                    .map(Comment::getText)
+                    .map(text -> text.length() > 97 ? text.substring(0, 97) + "..." : text)
+                    .orElse(null);
+            mainPageCards.add(new ThreadMainPageDto(thread.getId(), thread.getTitle(), thread.getCreator().getUsername(),shortDescription));
+        }
+
+        return mainPageCards;
     }
 }

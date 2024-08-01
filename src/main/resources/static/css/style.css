@@ -1,5 +1,22 @@
 body{
     background-color: #758467;
+    display: flex;
+    flex-direction: column;
+}
+
+html, body {
+    height: 100%;
+}
+
+.container {
+    flex: 1 0 auto;
+}
+.footer {
+    margin-top: 15px;
+    flex-shrink: 0;
+    background-color: #f5f5f5;
+    padding: 10px 0;
+    text-align: center;
 }
 
 .card {
@@ -62,4 +79,30 @@ body{
     background-color: #586153;
     color: black;
     border-color: black;
+}
+
+.delete-link {
+    color: red;
+}
+
+.edit-link {
+    color: dodgerblue;
+}
+
+.btn {
+    width: 100%;
+    background-color: #212529;
+    border-color: black;
+}
+
+.categories {
+    background-color: #5e716a;
+}
+
+.category-link {
+    color: darkblue;
+}
+
+.centered {
+    text-align: center;
 }
