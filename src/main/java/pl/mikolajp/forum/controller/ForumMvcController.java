@@ -1,9 +1,11 @@
 package pl.mikolajp.forum.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.mikolajp.forum.model.dto.CommentDto;
 import pl.mikolajp.forum.model.dto.ThreadCreationDto;
@@ -25,7 +27,7 @@ public class ForumMvcController {
     private CommentService commentService;
 
     @GetMapping({"/forum"})
-    public String showHome(Model model){
+    public String showHome(Model model) {
         List<ThreadMainPageDto> threads = threadService.showThreadCards();
         model.addAttribute("allCategories", categoryService.getAllCategories());
         model.addAttribute("threads", threads);
@@ -34,7 +36,7 @@ public class ForumMvcController {
     }
 
     @GetMapping({"/forum/{categoryId}"})
-    public String showFromCategory(Model model, @PathVariable("categoryId") Long categoryId){
+    public String showFromCategory(Model model, @PathVariable("categoryId") Long categoryId) {
         List<ThreadMainPageDto> threads = threadService.showThreadCardsFromCategory(categoryId);
         model.addAttribute("allCategories", categoryService.getAllCategories());
         model.addAttribute("threads", threads);
@@ -43,33 +45,33 @@ public class ForumMvcController {
     }
 
     @GetMapping({"/search"})
-    public String showSearchPage(){
+    public String showSearchPage() {
         return "search";
     }
 
     @PostMapping({"/search/results"})
-    public String showFromCategory(@RequestParam("searchTitle") String searchTitle,Model model ){
+    public String showFromCategory(@RequestParam("searchTitle") String searchTitle, Model model) {
         List<ThreadMainPageDto> foundThreads = threadService.searchThreadCards(searchTitle);
         model.addAttribute("threads", foundThreads);
 
         return "search";
     }
 
-    @GetMapping({"/","/home","/index"})
-    public String showHome(){
+    @GetMapping({"/", "/home", "/index"})
+    public String showHome() {
         return "home";
     }
 
     @GetMapping({"/thread/{id}"})
-    public String showThread(Model model, @PathVariable("id") Long id){
-        model.addAttribute(threadService.getThreadById(id));
+    public String showThread(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("thread", threadService.getThreadById(id));
         model.addAttribute("commentDto", new CommentDto());
 
         return "thread/thread";
     }
 
     @GetMapping({"/new/thread"})
-    public String showThreadCreationPage(Model model){
+    public String showThreadCreationPage(Model model) {
         ThreadCreationDto threadCreationDto = new ThreadCreationDto();
         model.addAttribute("threadCreationDto", threadCreationDto);
         model.addAttribute("allCategories", categoryService.getAllCategories());
@@ -78,15 +80,15 @@ public class ForumMvcController {
     }
 
     @PostMapping(value = "/new/thread")
-    public String createNewThread(@ModelAttribute ThreadCreationDto threadCreationDto, Authentication authentication){
+    public String createNewThread(@ModelAttribute ThreadCreationDto threadCreationDto, Authentication authentication) {
         threadService.saveThread(threadCreationDto, authentication);
 
         return "redirect:/forum";
     }
 
     @GetMapping("/edit/thread/{id}")
-    public String editExistingThread(Model model, @PathVariable("id") Long id){
-        try{
+    public String editExistingThread(Model model, @PathVariable("id") Long id) {
+        try {
             model.addAttribute("allCategories", categoryService.getAllCategories());
 
             Thread thread = threadService.fetchEditedThread(id);
@@ -97,19 +99,19 @@ public class ForumMvcController {
             threadCreationDto.setTitle(thread.getTitle());
             threadCreationDto.setCategoryId(thread.getCategory().getId());
             model.addAttribute("threadCreationDto", threadCreationDto);
-        }catch (Exception e){
+        } catch (Exception e) {
             return "redirect:/forum";
         }
 
         return "thread/edit";
     }
 
-    @PostMapping ("/edit/thread/{id}")
-    public String updateThread(Model model, @PathVariable("id") Long id, @ModelAttribute ThreadCreationDto threadCreationDto){
-        try{
+    @PostMapping("/edit/thread/{id}")
+    public String updateThread(Model model, @PathVariable("id") Long id, @ModelAttribute ThreadCreationDto threadCreationDto) {
+        try {
             Thread thread = threadService.fetchEditedThread(id);
             threadService.updateThread(threadCreationDto, thread);
-        }catch (Exception e){
+        } catch (Exception e) {
             return "redirect:/forum";
         }
 
@@ -117,17 +119,23 @@ public class ForumMvcController {
     }
 
     @GetMapping("/delete/thread/{id}")
-    public String deleteThread(@PathVariable("id") Long id){
-        try{
+    public String deleteThread(@PathVariable("id") Long id) {
+        try {
             threadService.deleteThread(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             return "redirect:/forum";
         }
         return "redirect:/forum";
     }
 
     @PostMapping("/new/comment/{threadId}")
-    public String addComment(@ModelAttribute("commentNewDto") CommentDto commentDto, Authentication authentication, @PathVariable Long threadId) {
+    public String addComment(@Valid @ModelAttribute("commentDto") CommentDto commentDto, BindingResult bindingResult, Model model, Authentication authentication, @PathVariable Long threadId) {
+        if (bindingResult.hasErrors()) {
+            Thread thread = threadService.getThreadById(threadId);
+            model.addAttribute("thread", thread);
+            return "thread/thread";
+        }
+
         String username = authentication.getName();
         commentDto.setThreadId(threadId);
 
@@ -137,13 +145,13 @@ public class ForumMvcController {
     }
 
     @GetMapping("/delete/comment/{id}")
-    public String deleteComment(@PathVariable("id") Long id){
+    public String deleteComment(@PathVariable("id") Long id) {
         Long redirectId;
-        try{
+        try {
             redirectId = commentService.deleteComment(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             return "redirect:/forum";
         }
-        return "redirect:/thread/"+redirectId;
+        return "redirect:/thread/" + redirectId;
     }
 }

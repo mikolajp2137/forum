@@ -59,6 +59,7 @@
             <form th:action="@{/new/comment/{threadId}(threadId=${thread.id})}" method="post" th:object="${commentDto}">
                 <div class="form-group">
                     <textarea class="form-control" th:field="*{text}" rows="3" placeholder="Enter your comment here"></textarea>
+                    <p th:if="${#fields.hasErrors('text')}" th:errorclass="text-danger" th:errors="${commentDto.text}"></p>
                 </div>
                 <button type="submit" class="btn btn-primary mt-2">Comment</button>
             </form>
