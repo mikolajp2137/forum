@@ -41,16 +41,7 @@ public class ThreadService {
     public List<ThreadMainPageDto> showThreadCards(){
         List<ThreadMainPageDto> mainPageCards = new ArrayList<>();
         List<Thread> threads = threadRepository.findAll(Sort.by(Sort.Direction.DESC, "creationDate"));
-        for(Thread thread : threads){
-            String shortDescription = commentRepository.findAllByThreadIdOrderByCreationDateAsc(thread.getId()).stream()
-                    .findFirst()
-                    .map(Comment::getText)
-                    .map(text -> text.length() > 97 ? text.substring(0, 97) + "..." : text)
-                    .orElse(null);
-            mainPageCards.add(new ThreadMainPageDto(thread.getId(), thread.getTitle(), thread.getCreator().getUsername(),shortDescription));
-        }
-
-        return mainPageCards;
+        return associateDtoFieldsForThreadCards(mainPageCards, threads);
     }
 
     public Thread getThreadById(Long id){
@@ -194,6 +185,16 @@ public class ThreadService {
     public List<ThreadMainPageDto> showThreadCardsFromCategory(Long categoryId) {
         List<ThreadMainPageDto> mainPageCards = new ArrayList<>();
         List<Thread> threads = threadRepository.findAllByCategoryId(categoryId, Sort.by(Sort.Direction.DESC, "creationDate"));
+        return associateDtoFieldsForThreadCards(mainPageCards, threads);
+    }
+
+    public List<ThreadMainPageDto> searchThreadCards(String searchTitle) {
+        List<ThreadMainPageDto> mainPageCards = new ArrayList<>();
+        List<Thread> threads = threadRepository.findAllByTitleContaining(searchTitle, Sort.by(Sort.Direction.DESC, "creationDate"));
+        return associateDtoFieldsForThreadCards(mainPageCards, threads);
+    }
+
+    private List<ThreadMainPageDto> associateDtoFieldsForThreadCards(List<ThreadMainPageDto> mainPageCards, List<Thread> threads) {
         for(Thread thread : threads){
             String shortDescription = commentRepository.findAllByThreadIdOrderByCreationDateAsc(thread.getId()).stream()
                     .findFirst()

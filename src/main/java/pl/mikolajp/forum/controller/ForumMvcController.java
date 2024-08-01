@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.mikolajp.forum.model.dto.CommentDto;
 import pl.mikolajp.forum.model.dto.ThreadCreationDto;
 import pl.mikolajp.forum.model.dto.ThreadMainPageDto;
-import pl.mikolajp.forum.model.entity.Category;
-import pl.mikolajp.forum.model.entity.Comment;
 import pl.mikolajp.forum.model.entity.Thread;
 import pl.mikolajp.forum.service.CategoryService;
 import pl.mikolajp.forum.service.CommentService;
@@ -44,6 +42,19 @@ public class ForumMvcController {
         return "forum";
     }
 
+    @GetMapping({"/search"})
+    public String showSearchPage(){
+        return "search";
+    }
+
+    @PostMapping({"/search/results"})
+    public String showFromCategory(@RequestParam("searchTitle") String searchTitle,Model model ){
+        List<ThreadMainPageDto> foundThreads = threadService.searchThreadCards(searchTitle);
+        model.addAttribute("threads", foundThreads);
+
+        return "search";
+    }
+
     @GetMapping({"/","/home","/index"})
     public String showHome(){
         return "home";
@@ -66,7 +77,7 @@ public class ForumMvcController {
         return "thread/new-thread";
     }
 
-    @RequestMapping(value = "/new/thread", method = RequestMethod.POST)
+    @PostMapping(value = "/new/thread")
     public String createNewThread(@ModelAttribute ThreadCreationDto threadCreationDto, Authentication authentication){
         threadService.saveThread(threadCreationDto, authentication);
 

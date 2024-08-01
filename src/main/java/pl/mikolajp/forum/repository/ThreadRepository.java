@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ThreadRepository extends JpaRepository<Thread, Long> {
     public List<Thread> findAllByCategoryId(Long id, Sort sort);
+
+    public List<Thread> findAllByTitleContaining(String title, Sort sort);
 }
