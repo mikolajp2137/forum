@@ -10,7 +10,8 @@
     <title>Forum™ - Register</title>
 </head>
 <body>
-<div th:replace="navbar :: navbar"></div>
+<div th:replace="~{navbar :: navbar}"></div>
+
 <div class="container">
     <div class="content-wrapper">
         <div class="card border-dark">
@@ -66,6 +67,6 @@
     </div>
 </div>
 
-<div th:replace="footer :: footer"></div>
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

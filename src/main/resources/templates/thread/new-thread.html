@@ -9,7 +9,7 @@
     <title>Forum™ - New thread</title>
 </head>
 <body>
-<div th:replace="navbar :: navbar"></div>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <div class="container">
     <form method="post" enctype="multipart/form-data" th:object="${threadCreationDto}" th:action="@{/new/thread}">
@@ -46,6 +46,6 @@
     </form>
 </div>
 
-<div th:replace="footer :: footer"></div>
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

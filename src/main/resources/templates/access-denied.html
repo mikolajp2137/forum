@@ -9,11 +9,12 @@
     <title>Forum™ - Access Denied</title>
 </head>
 <body>
+    <div th:replace="~{navbar :: navbar}"></div>
 
     <h2>Acccess Denied :(</h2>
 
     <a th:href="@{/}">Back to the Home page</a>
 
-    <div th:replace="footer :: footer"></div>
+    <div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

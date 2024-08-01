@@ -10,7 +10,7 @@
     <title>Forum™ - Home</title>
 </head>
 <body>
-<div th:replace="navbar :: navbar"></div>
+<div th:replace="~{navbar :: navbar}"></div>
 <div class="container">
     <p>Welcome to the Forum™! Here you can share your thoughts on the topic this Forum™ is about!</p>
 
@@ -73,6 +73,6 @@
     <p>You can view the code at github: https://github.com/mikolajp2137/forum</p>
 </div>
 
-<div th:replace="footer :: footer"></div>
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

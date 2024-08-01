@@ -9,7 +9,7 @@
     <title>Forum™ - List of threads</title>
 </head>
 <body>
-<div th:replace="navbar :: navbar"></div>
+<div th:replace="~{navbar :: navbar}"></div>
 <div class="container">
     <div class="card categories">
         <div class="card-header">Categories</div>
@@ -44,6 +44,6 @@
     </div>
 </div>
 
-<div th:replace="footer :: footer"></div>
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>

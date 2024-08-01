@@ -9,7 +9,7 @@
   <title>Forum™ - Edit thread</title>
 </head>
 <body>
-<div th:replace="navbar :: navbar"></div>
+<div th:replace="~{navbar :: navbar}"></div>
 
 <div class="container">
   <form method="post" th:action="@{'/edit/thread/' + ${thread.id}}" th:object="${threadCreationDto}" enctype="multipart/form-data">
@@ -46,6 +46,6 @@
   </form>
 </div>
 
-<div th:replace="footer :: footer"></div>
+<div th:replace="~{footer :: footer}"></div>
 </body>
 </html>
