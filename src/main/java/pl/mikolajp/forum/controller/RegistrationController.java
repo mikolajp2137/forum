@@ -51,12 +51,10 @@ public class RegistrationController {
 
         String username = userDto.getUsername();
 
-        // form validation
         if (theBindingResult.hasErrors()){
             return "user-management/register";
         }
 
-        // check the database if user already exists
         User existing = userService.findByUsername(username);
         if (existing != null){
             model.addAttribute("userDto", new UserDto());
@@ -66,12 +64,10 @@ public class RegistrationController {
             return "user-management/register";
         }
 
-        // create user account and store in the databse
         userService.save(userDto);
 
         logger.info("Successfully created user: " + username);
 
-        // place user in the web http session for later use
         session.setAttribute("user", userDto);
 
         return "home";

@@ -42,7 +42,7 @@
 
                         <div th:if="${#fields.hasErrors('username')}" class="text-danger validation-error">
                             <ul>
-                                <li th:each="err : ${#fields.errors('username')}" th:text="'Username ' + ${err}"></li>
+                                <li th:each="err : ${#fields.errors('username')}" th:text="${err}"></li>
                             </ul>
                         </div>
                         <!-- Password -->
@@ -52,7 +52,7 @@
                         </div>
                         <div th:if="${#fields.hasErrors('password')}" class="text-danger validation-error">
                             <ul>
-                                <li th:each="err : ${#fields.errors('password')}" th:text="'Password ' + ${err}"></li>
+                                <li th:each="err : ${#fields.errors('password')}" th:text="${err}"></li>
                             </ul>
                         </div>
 

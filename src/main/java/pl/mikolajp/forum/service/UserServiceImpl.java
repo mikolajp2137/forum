@@ -6,11 +6,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.mikolajp.forum.model.dao.RoleDao;
-import pl.mikolajp.forum.model.dao.UserDao;
 import pl.mikolajp.forum.model.dto.UserDto;
 import pl.mikolajp.forum.model.entity.Role;
 import pl.mikolajp.forum.model.entity.User;
+import pl.mikolajp.forum.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,20 +17,20 @@ import java.util.Collection;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserDao userDao;
-    private RoleDao roleDao;
+    private UserRepository userRepository;
+    private RoleService roleService;
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, RoleDao roleDao, BCryptPasswordEncoder passwordEncoder) {
-        this.userDao = userDao;
-        this.roleDao = roleDao;
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public User findByUsername(String userName) {
-        return userDao.findByUserName(userName);
+    public User findByUsername(String username) {
+        return userRepository.findByUsernameAndEnabledTrue(username);
     }
 
     @Override
@@ -42,14 +41,14 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setEnabled(true);
 
-        user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_USER")));
+        user.setRoles(Arrays.asList(roleService.findRoleByName("ROLE_USER")));
 
-        userDao.save(user);
+        userRepository.save(user);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        User user = userDao.findByUserName(userName);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsernameAndEnabledTrue(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
