@@ -17,7 +17,7 @@ public class ThreadCreationDto {
     @Size(max = 250, message = "The title is too long (at most 250 characters)")
     private String title;
     @Size(min = 2, message = "The text is too short (at least 2 characters)")
-    @Size(max = 2100, message = "The text is too long")
+    @Size(max = 2222, message = "The text is too long")
     private String text;
     private String creator;
     @NotNull(message = "Category cannot be empty!")

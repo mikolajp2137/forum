@@ -12,6 +12,6 @@ public class CommentDto {
     private Long threadId;
 
     @Size(min = 2, message = "The comment is too short (at least 2 characters)")
-    @Size(max = 2137, message = "The comment is too long")
+    @Size(max = 2222, message = "The comment is too long")
     private String text;
 }
