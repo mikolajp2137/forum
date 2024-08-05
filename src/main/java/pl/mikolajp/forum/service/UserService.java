@@ -1,11 +1,73 @@
 package pl.mikolajp.forum.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 import pl.mikolajp.forum.model.dto.UserDto;
+import pl.mikolajp.forum.model.entity.Role;
 import pl.mikolajp.forum.model.entity.User;
+import pl.mikolajp.forum.repository.UserRepository;
 
-public interface UserService extends UserDetailsService {
-    public User findByUsername(String username);
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
-    void save(UserDto userDto);
+@Service
+public class UserService implements UserDetailsService {
+    private UserRepository userRepository;
+    private RoleService roleService;
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserService(UserRepository userRepository, RoleService roleService, BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsernameAndEnabledTrue(username);
+    }
+
+
+    public void save(UserDto userDto) {
+        User user = new User();
+
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        user.setEnabled(true);
+
+        user.setRoles(Arrays.asList(roleService.findRoleByName("ROLE_USER")));
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsernameAndEnabledTrue(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Invalid username or password.");
+        }
+
+        Collection<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
+
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+                authorities);
+    }
+
+    private Collection<SimpleGrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
+        for (Role tempRole : roles) {
+            SimpleGrantedAuthority tempAuthority = new SimpleGrantedAuthority(tempRole.getName());
+            authorities.add(tempAuthority);
+        }
+
+        return authorities;
+    }
 }
