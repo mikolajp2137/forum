@@ -18,8 +18,6 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
-    private Logger logger = Logger.getLogger(getClass().getName());
-
     private UserService userService;
 
     @Autowired
@@ -60,13 +58,10 @@ public class RegistrationController {
             model.addAttribute("userDto", new UserDto());
             model.addAttribute("registrationError", "Username already exists.");
 
-            logger.warning("User name already exists.");
             return "user-management/register";
         }
 
         userService.save(userDto);
-
-        logger.info("Successfully created user: " + username);
 
         session.setAttribute("user", userDto);
 

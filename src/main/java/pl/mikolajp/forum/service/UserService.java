@@ -56,7 +56,9 @@ public class UserService implements UserDetailsService {
 
         List<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
                 authorities);
     }
 
