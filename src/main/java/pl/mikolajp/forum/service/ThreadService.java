@@ -178,8 +178,6 @@ public class ThreadService {
         }
 
         threadRepository.delete(thread);
-
-
     }
 
     public List<ThreadMainPageDto> showThreadCardsFromCategory(Long categoryId) {

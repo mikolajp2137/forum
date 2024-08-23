@@ -14,7 +14,7 @@ import pl.mikolajp.forum.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -54,14 +54,16 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
 
-        Collection<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
+        List<SimpleGrantedAuthority> authorities = mapRolesToAuthorities(user.getRoles());
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
+        return new org.springframework.security.core.userdetails.User(
+                user.getUsername(),
+                user.getPassword(),
                 authorities);
     }
 
-    private Collection<SimpleGrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+    private List<SimpleGrantedAuthority> mapRolesToAuthorities(List<Role> roles) {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
         for (Role tempRole : roles) {
             SimpleGrantedAuthority tempAuthority = new SimpleGrantedAuthority(tempRole.getName());
