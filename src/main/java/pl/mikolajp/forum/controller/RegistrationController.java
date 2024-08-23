@@ -13,8 +13,6 @@ import pl.mikolajp.forum.model.dto.UserDto;
 import pl.mikolajp.forum.model.entity.User;
 import pl.mikolajp.forum.service.UserService;
 
-import java.util.logging.Logger;
-
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
@@ -34,7 +32,7 @@ public class RegistrationController {
     }
 
     @GetMapping("/showRegistrationForm")
-    public String showMyLoginPage(Model model) {
+    public String showRegisterPage(Model model) {
 
         model.addAttribute("userDto", new UserDto());
 
@@ -44,12 +42,12 @@ public class RegistrationController {
     @PostMapping("/processRegistrationForm")
     public String processRegistrationForm(
             @Valid @ModelAttribute("userDto") UserDto userDto,
-            BindingResult theBindingResult,
+            BindingResult bindingResult,
             HttpSession session, Model model) {
 
         String username = userDto.getUsername();
 
-        if (theBindingResult.hasErrors()){
+        if (bindingResult.hasErrors()){
             return "user-management/register";
         }
 
