@@ -12,13 +12,12 @@
 <div th:replace="~{navbar :: navbar}"></div>
 
 <div class="container">
-    <!-- thread main body -->
     <div class="card">
         <h5 class="card-header" th:text="${thread.creator.username} + ' says: ' + ${thread.title}"></h5>
         <div class="card-body">
             <p class="card-text" th:text="${thread.comments[0].text}"></p>
 
-            <!-- images section -->
+            <!-- start of images section -->
             <table>
                 <tr th:if="${!#lists.isEmpty(thread.comments[0].images)}">
                     <td>
@@ -51,7 +50,7 @@
         </div>
     </div>
 
-    <!-- comments sections-->
+    <!-- start of comments sections -->
     <hr>
     <div class="card mb-3">
         <div class="card-header">Add a comment</div>
@@ -80,6 +79,7 @@
             </div>
         </div>
     </div>
+    <!-- end of comments section -->
 </div>
 
 <div th:replace="~{footer :: footer}"></div>
