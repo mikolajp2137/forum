@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +24,10 @@ public class ThreadCreationDto {
     @NotNull(message = "Category cannot be empty!")
     private Long categoryId;
     private List<MultipartFile> imageFiles;
+
+    public void setImageFiles(List<MultipartFile> imageFiles) {
+        this.imageFiles = imageFiles.stream()
+                .filter(file -> !file.isEmpty())
+                .collect(Collectors.toList());
+    }
 }

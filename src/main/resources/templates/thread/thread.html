@@ -19,7 +19,7 @@
 
             <!-- start of images section -->
             <table>
-                <tr th:if="${!#lists.isEmpty(thread.comments[0].images)}">
+                <tr th:unless="${#lists.isEmpty(thread.comments[0].images)}">
                     <td>
                         <div style="display: flex; flex-wrap: wrap; gap: 10px; max-width: 100%;">
                             <div th:each="image, imageStat : ${thread.comments[0].images}" style="margin-bottom: 10px;">
